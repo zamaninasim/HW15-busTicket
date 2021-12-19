@@ -3,10 +3,12 @@ package ir.maktab;
 import ir.maktab.enums.Gender;
 import ir.maktab.model.Address;
 import ir.maktab.model.Admin;
+import ir.maktab.model.Bus;
+import ir.maktab.model.Company;
 import ir.maktab.model.builder.AdminBuilder;
 import ir.maktab.service.AdminService;
+import ir.maktab.service.CompanyService;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.Scanner;
 public class Main {
     static final Scanner scanner = new Scanner(System.in);
     static final AdminService adminService = new AdminService();
+    static final CompanyService companyService = new CompanyService();
 
     public static void main(String[] args) throws ParseException {
         addAdmin();
@@ -64,8 +67,20 @@ public class Main {
                 addAdmin();
                 break;
             case 2:
+                addCompany();
+                break;
+            case 3:
+                Bus bus = new Bus();
 
         }
+    }
+
+    private static void addCompany() {
+        Company company = new Company();
+        System.out.println("enter company name:");
+        String name = scanner.next();
+        company.setName(name);
+        companyService.save(company);
     }
 
     private static void addAdmin() throws ParseException {
