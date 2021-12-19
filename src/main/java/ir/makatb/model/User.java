@@ -9,8 +9,9 @@ import java.util.List;
 
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.TABLE)
     private Integer id;
     private String firstname;
     private String lastname;
@@ -20,5 +21,4 @@ public class User {
     @OneToMany
     private List<Address> address;
     private String email;
-    private String password;
 }
