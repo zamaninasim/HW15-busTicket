@@ -1,5 +1,6 @@
 package ir.maktab;
 
+import ir.maktab.enums.BusType;
 import ir.maktab.enums.Gender;
 import ir.maktab.model.Address;
 import ir.maktab.model.Admin;
@@ -12,7 +13,6 @@ import ir.maktab.service.CompanyService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -47,7 +47,7 @@ public class Main {
                     adminActs();
                     repeat = false;
                 } else {
-                    System.out.println("wrong password");
+                    System.out.println("wrong password:");
                 }
             } catch (RuntimeException | ParseException e) {
                 System.out.println(e.getMessage());
@@ -70,9 +70,24 @@ public class Main {
                 addCompany();
                 break;
             case 3:
-                Bus bus = new Bus();
-
+                addBus();
         }
+    }
+
+    private static void addBus() {
+        System.out.println("enter bus info:(plaque,type,availableSeat,companyName)");
+        String busInfo = scanner.next();
+        String[] splitInfo = busInfo.split(",");
+        String plaque = splitInfo[0];
+        BusType type = BusType.getValue(splitInfo[1]);
+        Integer availableSeat = Integer.parseInt(splitInfo[2]);
+        String companyName = splitInfo[3];
+        Company company = companyService.findByName(companyName);
+        Bus bus = new Bus();
+        bus.setPlaque(plaque);
+        bus.setType(type);
+        bus.setAvailableSeat(availableSeat);
+        bus.setCompany(company);
     }
 
     private static void addCompany() {
@@ -89,7 +104,7 @@ public class Main {
         String[] splitInfo = userInfo.split(",");
         String firstname = splitInfo[0];
         String lastname = splitInfo[1];
-        Gender gender = Gender.getValue(splitInfo[2].toUpperCase(Locale.ROOT));
+        Gender gender = Gender.getValue(splitInfo[2]);
         String email = splitInfo[3];
         System.out.println("enter birthdate like this:(2021-11-08)");
         Date birthdate = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
