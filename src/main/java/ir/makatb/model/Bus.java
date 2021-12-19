@@ -13,6 +13,7 @@ public class Bus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String plaque;
+    @Enumerated
     private BusType type;
     private Integer availableSeat;
     @OneToMany

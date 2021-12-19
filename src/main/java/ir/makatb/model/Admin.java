@@ -9,5 +9,6 @@ import javax.persistence.Entity;
 @Data
 @ToString(callSuper = true)
 public class Admin extends User{
+    private String username;
     private String password;
 }
