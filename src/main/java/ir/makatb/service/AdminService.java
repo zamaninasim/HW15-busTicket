@@ -14,6 +14,6 @@ public class AdminService {
             final Admin found = admin.get();
             return found;
         }
-        throw new RuntimeException("Admin not found.");
+        throw new RuntimeException("this username not exist.");
     }
 }
