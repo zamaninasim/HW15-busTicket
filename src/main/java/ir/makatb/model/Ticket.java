@@ -24,5 +24,7 @@ public class Ticket {
     private City destination;
     @ManyToOne
     private Company company;
+    @ManyToOne
+    private Bus bus;
 
 }
