@@ -17,7 +17,7 @@ public class Ticket {
     private Date date;
     @Temporal(value = TemporalType.TIME)
     private Date time;
-    private String ticketType;
+    //private String ticketType;
     private Long Price;
     private Integer seatNumber;
     private City origin;

@@ -4,6 +4,7 @@ import ir.maktab.enums.Gender;
 import ir.maktab.model.Address;
 import ir.maktab.model.Admin;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,8 +61,8 @@ public final class AdminBuilder {
         return this;
     }
 
-    public AdminBuilder withAddress(List<Address> address) {
-        this.address = address;
+    public AdminBuilder withAddress() {
+        this.address = new ArrayList<>();
         return this;
     }
 

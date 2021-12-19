@@ -4,6 +4,7 @@ import ir.maktab.enums.Gender;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class User {
     private Gender gender;
     @Temporal(TemporalType.DATE)
     private Date birthdate;
-    @OneToMany
-    private List<Address> address;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Address> address = new ArrayList<>();
     private String email;
 }

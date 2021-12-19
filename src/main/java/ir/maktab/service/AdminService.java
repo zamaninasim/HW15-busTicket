@@ -8,6 +8,10 @@ import java.util.Optional;
 public class AdminService {
     AdminDao adminDao = new AdminDao();
 
+    public void save(Admin admin) {
+        adminDao.save(admin);
+    }
+
     public Admin findByUsername(String username) throws RuntimeException {
         Optional<Admin> admin = adminDao.findByUsername(username);
         if (admin.isPresent()) {
