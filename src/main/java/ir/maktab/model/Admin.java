@@ -1,4 +1,4 @@
-package ir.makatb.model;
+package ir.maktab.model;
 
 import lombok.Data;
 import lombok.ToString;
@@ -11,4 +11,5 @@ import javax.persistence.Entity;
 public class Admin extends User{
     private String username;
     private String password;
+
 }

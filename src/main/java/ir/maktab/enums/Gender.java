@@ -1,4 +1,4 @@
-package ir.makatb.enums;
+package ir.maktab.enums;
 
 public enum Gender {
     FEMALE,

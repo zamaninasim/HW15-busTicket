@@ -1,4 +1,4 @@
-package ir.makatb.model;
+package ir.maktab.model;
 
 import lombok.Data;
 import lombok.ToString;

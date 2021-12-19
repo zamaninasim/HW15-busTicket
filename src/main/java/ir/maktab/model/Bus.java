@@ -1,6 +1,6 @@
-package ir.makatb.model;
+package ir.maktab.model;
 
-import ir.makatb.enums.BusType;
+import ir.maktab.enums.BusType;
 import lombok.Data;
 
 import javax.persistence.*;

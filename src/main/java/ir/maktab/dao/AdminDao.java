@@ -1,11 +1,10 @@
-package ir.makatb.dao;
+package ir.maktab.dao;
 
-import ir.makatb.model.Admin;
+import ir.maktab.model.Admin;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import java.util.List;
 import java.util.Optional;
 
 public class AdminDao extends BaseDao {

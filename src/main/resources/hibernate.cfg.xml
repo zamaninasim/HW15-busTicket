@@ -16,9 +16,15 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
 
-        <mapping class="ir.makatb.model.User"/>
-        <mapping class="ir.makatb.model.Admin"/>
-        <mapping class="ir.makatb.model.Customer"/>
+        <mapping class="ir.maktab.model.User"/>
+        <mapping class="ir.maktab.model.Admin"/>
+        <mapping class="ir.maktab.model.Customer"/>
+        <mapping class="ir.maktab.model.Reservation"/>
+        <mapping class="ir.maktab.model.Ticket"/>
+        <mapping class="ir.maktab.model.Bus"/>
+        <mapping class="ir.maktab.model.Company"/>
+        <mapping class="ir.maktab.model.Address"/>
+
 
     </session-factory>
 </hibernate-configuration>

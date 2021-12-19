@@ -1,6 +1,6 @@
-package ir.makatb.model;
+package ir.maktab.model;
 
-import ir.makatb.enums.Gender;
+import ir.maktab.enums.Gender;
 import lombok.Data;
 
 import javax.persistence.*;

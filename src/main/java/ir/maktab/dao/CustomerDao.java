@@ -1,6 +1,6 @@
-package ir.makatb.dao;
+package ir.maktab.dao;
 
-import ir.makatb.model.Customer;
+import ir.maktab.model.Customer;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
