@@ -1,11 +1,9 @@
 package ir.makatb.model;
 
+import ir.makatb.enums.City;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
@@ -15,9 +13,15 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer ticketNumber;
+    @Temporal(value = TemporalType.DATE)
     private Date date;
+    @Temporal(value = TemporalType.TIME)
+    private Date time;
     private String ticketType;
     private Long Price;
     private Integer seatNumber;
+    private City origin;
+    private City destination;
+    private
 
 }
