@@ -17,6 +17,7 @@ public class User {
     private String lastname;
     @Enumerated
     private Gender gender;
+    @Temporal(TemporalType.DATE)
     private Date birthdate;
     @OneToMany
     private List<Address> address;
