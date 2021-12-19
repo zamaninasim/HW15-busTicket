@@ -1,5 +1,15 @@
 package ir.makatb.model;
 
-public class Customer extends User {
+import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.List;
+@Data
+@Entity
+
+public class Customer extends User {
+    @OneToMany
+    private List<Reservation> reservations;
 }
