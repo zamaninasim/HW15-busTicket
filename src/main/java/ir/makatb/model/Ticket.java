@@ -22,6 +22,7 @@ public class Ticket {
     private Integer seatNumber;
     private City origin;
     private City destination;
-    private
+    @ManyToOne
+    private Company company;
 
 }
