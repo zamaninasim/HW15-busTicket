@@ -8,6 +8,7 @@ import ir.maktab.model.Bus;
 import ir.maktab.model.Company;
 import ir.maktab.model.builder.AdminBuilder;
 import ir.maktab.service.AdminService;
+import ir.maktab.service.BusService;
 import ir.maktab.service.CompanyService;
 
 import java.text.ParseException;
@@ -19,9 +20,10 @@ public class Main {
     static final Scanner scanner = new Scanner(System.in);
     static final AdminService adminService = new AdminService();
     static final CompanyService companyService = new CompanyService();
+    static final BusService busService = new BusService();
 
     public static void main(String[] args) throws ParseException {
-        addAdmin();
+        //addAdmin();
 
         System.out.println("1)manager\n2)customer");
         int role = scanner.nextInt();
@@ -60,7 +62,7 @@ public class Main {
                 1)add new Admin
                 2)add new Company
                 3)add new Bus
-                2)add new Ticket""");
+                4)add new Ticket""");
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:
@@ -71,6 +73,9 @@ public class Main {
                 break;
             case 3:
                 addBus();
+                break;
+            case 4:
+                break;
         }
     }
 
@@ -88,6 +93,7 @@ public class Main {
         bus.setType(type);
         bus.setAvailableSeat(availableSeat);
         bus.setCompany(company);
+        busService.save(bus);
     }
 
     private static void addCompany() {

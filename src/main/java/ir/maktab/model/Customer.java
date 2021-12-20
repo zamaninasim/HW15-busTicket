@@ -11,6 +11,6 @@ import java.util.List;
 @Entity
 @ToString(callSuper = true)
 public class Customer extends User {
-    @OneToMany
+    @OneToMany(mappedBy = "customer")
     private List<Reservation> reservations;
 }

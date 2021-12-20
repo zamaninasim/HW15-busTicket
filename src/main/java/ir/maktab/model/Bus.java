@@ -16,8 +16,8 @@ public class Bus {
     @Enumerated
     private BusType type;
     private Integer availableSeat;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Company company;
-    @OneToMany
+    @OneToMany(mappedBy = "company")
     private List<Ticket> tickets;
 }
