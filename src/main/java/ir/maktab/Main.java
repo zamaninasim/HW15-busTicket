@@ -2,11 +2,13 @@ package ir.maktab;
 
 import ir.maktab.enums.BusType;
 import ir.maktab.enums.Gender;
+import ir.maktab.enums.SeatType;
 import ir.maktab.model.*;
 import ir.maktab.model.builder.AdminBuilder;
 import ir.maktab.service.AdminService;
 import ir.maktab.service.BusService;
 import ir.maktab.service.CompanyService;
+import ir.maktab.service.SeatService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,7 +20,7 @@ public class Main {
     static final AdminService adminService = new AdminService();
     static final CompanyService companyService = new CompanyService();
     static final BusService busService = new BusService();
-
+    static final SeatService seatService = new SeatService();
     public static void main(String[] args) throws ParseException {
         //addAdmin();
 
@@ -88,21 +90,22 @@ public class Main {
         String[] splitInfo = busInfo.split(",");
         String plaque = splitInfo[0];
         BusType type = BusType.getValue(splitInfo[1]);
-        Integer availableSeat = Integer.parseInt(splitInfo[2]);
+        int availableSeat = Integer.parseInt(splitInfo[2]);
         String companyName = splitInfo[3];
         Company company = companyService.findByName(companyName);
         Bus bus = new Bus();
         bus.setPlaque(plaque);
         bus.setType(type);
         bus.setCompany(company);
+        busService.save(bus);
 
         for (int i=0;i<=availableSeat;i++){
             Seat seat = new Seat();
             seat.setSeatNumber(i);
-            bus.getSeats().add(seat);
+            seat.setSeatType(SeatType.AVAILABLE);
+            seat.setBus(bus);
+            seatService.save(seat);
         }
-
-        busService.save(bus);
     }
 
     private static void addCompany() {

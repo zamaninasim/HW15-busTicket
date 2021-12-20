@@ -14,4 +14,6 @@ public class Seat {
     private Integer seatNumber;
     @Enumerated(EnumType.STRING)
     private SeatType seatType;
+    @ManyToOne()
+    private Bus bus;
 }

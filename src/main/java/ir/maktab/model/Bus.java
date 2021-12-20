@@ -4,6 +4,7 @@ import ir.maktab.enums.BusType;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,9 +16,8 @@ public class Bus {
     private String plaque;
     @Enumerated(EnumType.STRING)
     private BusType type;
-    //private Integer availableSeat;
-    @OneToMany
-    private List<Seat> seats;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "bus")
+    private List<Seat> seats=new ArrayList<>();
     @ManyToOne
     private Company company;
     @OneToMany(mappedBy = "company")
