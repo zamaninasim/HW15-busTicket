@@ -16,10 +16,11 @@ public class Bus {
     private String plaque;
     @Enumerated(EnumType.STRING)
     private BusType type;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "bus")
+    @OneToMany(mappedBy = "bus")
     private List<Seat> seats=new ArrayList<>();
+    private Integer availableSeat;
     @ManyToOne
     private Company company;
-    @OneToMany(mappedBy = "company")
-    private List<Ticket> tickets;
+/*    @OneToMany()
+    private List<Ticket> tickets;*/
 }

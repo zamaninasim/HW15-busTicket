@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.TimeZone;
 
 @Data
 @Entity
@@ -17,14 +18,10 @@ public class Ticket {
     @Temporal(value = TemporalType.TIME)
     private Date time;
     private Long Price;
-    //private Integer seatNumber;
+    @Enumerated(EnumType.STRING)
     private City origin;
+    @Enumerated(EnumType.STRING)
     private City destination;
-    @ManyToOne
-    private Company company;
-    @ManyToOne
-    private Bus bus;
     @OneToOne
     private Seat seat;
-
 }

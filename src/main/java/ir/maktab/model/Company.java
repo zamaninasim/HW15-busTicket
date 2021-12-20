@@ -12,7 +12,7 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    @OneToMany(mappedBy = "company")
+    @OneToMany
     private List<Ticket> tickets;
     @OneToMany(mappedBy = "company")
     private List<Bus> buses;

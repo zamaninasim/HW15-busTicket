@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/bus_ticket</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">Nasim1374</property>
+
+        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+
+        <property name="hbm2ddl.auto">update</property>
+        <!--<property name="hbm2ddl.auto">create</property>-->
+        <property name="connection.pool_size">10</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+
+        <mapping class="ir.maktab.model.User"/>
+        <mapping class="ir.maktab.model.Admin"/>
+        <mapping class="ir.maktab.model.Customer"/>
+        <mapping class="ir.maktab.model.Reservation"/>
+        <mapping class="ir.maktab.model.Ticket"/>
+        <mapping class="ir.maktab.model.Bus"/>
+        <mapping class="ir.maktab.model.Company"/>
+        <mapping class="ir.maktab.model.Address"/>
+        <mapping class="ir.maktab.model.Seat"/>
+
+
+    </session-factory>
+</hibernate-configuration>

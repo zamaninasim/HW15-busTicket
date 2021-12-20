@@ -1,18 +1,17 @@
 package ir.maktab;
 
 import ir.maktab.enums.BusType;
+import ir.maktab.enums.City;
 import ir.maktab.enums.Gender;
 import ir.maktab.enums.SeatType;
 import ir.maktab.model.*;
 import ir.maktab.model.builder.AdminBuilder;
-import ir.maktab.service.AdminService;
-import ir.maktab.service.BusService;
-import ir.maktab.service.CompanyService;
-import ir.maktab.service.SeatService;
+import ir.maktab.service.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -21,6 +20,7 @@ public class Main {
     static final CompanyService companyService = new CompanyService();
     static final BusService busService = new BusService();
     static final SeatService seatService = new SeatService();
+    static final TicketService ticketService = new TicketService();
     public static void main(String[] args) throws ParseException {
         //addAdmin();
 
@@ -32,6 +32,54 @@ public class Main {
                 break;
             case 2:
                 break;
+        }
+    }
+
+    private static void adminActs() throws ParseException {
+        System.out.println("""
+                1)add new Admin
+                2)add new Company
+                3)add new Bus
+                4)add new Ticket
+                5)show reports
+                """);
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                addAdmin();
+                break;
+            case 2:
+                addCompany();
+                break;
+            case 3:
+                addBus();
+                break;
+            case 4:
+                addTicket();
+        }
+    }
+
+    private static void addTicket() throws ParseException {
+        System.out.println("enter ticket info:(date(yyyy-MM-dd),time(hh:mm),Price,origin,destination,busPlaque");
+        String info = scanner.next();
+        String[] splitInfo = info.split(",");
+        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(splitInfo[0]);
+        Date time = new SimpleDateFormat("hh:mm").parse(splitInfo[1]);
+        Long price = Long.parseLong(splitInfo[2]);
+        City origin = City.getValue(splitInfo[3]);
+        City destination = City.getValue(splitInfo[4]);
+        String busPlaque = splitInfo[5];
+        Bus bus = busService.findByPlaque(busPlaque);
+        List<Seat> seats = bus.getSeats();
+        for (Seat seat :seats) {
+            Ticket ticket = new Ticket();
+            ticket.setDate(date);
+            ticket.setTime(time);
+            ticket.setPrice(price);
+            ticket.setOrigin(origin);
+            ticket.setDestination(destination);
+            ticket.setSeat(seat);
+            ticketService.save(ticket);
         }
     }
 
@@ -56,34 +104,6 @@ public class Main {
         } while (repeat);
     }
 
-    private static void adminActs() throws ParseException {
-        System.out.println("""
-                1)add new Admin
-                2)add new Company
-                3)add new Bus
-                4)add new Ticket
-                5)show reports
-                """);
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                addAdmin();
-                break;
-            case 2:
-                addCompany();
-                break;
-            case 3:
-                addBus();
-                break;
-            case 4:
-                System.out.println("enter ticket info:(date,time,Price");
-                Ticket ticket = new Ticket();
-                //ticket.setDate();
-
-                break;
-        }
-    }
-
     private static void addBus() {
         System.out.println("enter bus info:(plaque,type,availableSeat,companyName)");
         String busInfo = scanner.next();
@@ -97,9 +117,10 @@ public class Main {
         bus.setPlaque(plaque);
         bus.setType(type);
         bus.setCompany(company);
+        bus.setAvailableSeat(availableSeat);
         busService.save(bus);
 
-        for (int i=0;i<=availableSeat;i++){
+        for (int i = 0; i <= availableSeat; i++) {
             Seat seat = new Seat();
             seat.setSeatNumber(i);
             seat.setSeatType(SeatType.AVAILABLE);
@@ -117,13 +138,14 @@ public class Main {
     }
 
     private static void addAdmin() throws ParseException {
-        System.out.println("enter new admin info:(firstname,lastname,gender,email)");
+        System.out.println("enter new admin info:(firstname,lastname,gender,email,username)");
         String userInfo = scanner.next();
         String[] splitInfo = userInfo.split(",");
         String firstname = splitInfo[0];
         String lastname = splitInfo[1];
         Gender gender = Gender.getValue(splitInfo[2]);
         String email = splitInfo[3];
+        String username = splitInfo[4];
         System.out.println("enter birthdate like this:(2021-11-08)");
         Date birthdate = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
 
@@ -144,7 +166,7 @@ public class Main {
                 .withEmail(email)
                 .withBirthdate(birthdate)
                 .withGender(gender)
-                .withUsername("admin")
+                .withUsername(username)
                 .withPassword("admin")
                 .withAddress()
                 .build();
