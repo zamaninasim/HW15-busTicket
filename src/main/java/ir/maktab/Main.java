@@ -6,6 +6,7 @@ import ir.maktab.enums.Gender;
 import ir.maktab.enums.SeatType;
 import ir.maktab.model.*;
 import ir.maktab.model.builder.AdminBuilder;
+import ir.maktab.model.builder.CustomerBuilder;
 import ir.maktab.service.*;
 
 import java.text.ParseException;
@@ -21,9 +22,10 @@ public class Main {
     static final BusService busService = new BusService();
     static final SeatService seatService = new SeatService();
     static final TicketService ticketService = new TicketService();
+    static final CustomerService customerService = new CustomerService();
+
     public static void main(String[] args) throws ParseException {
         //addAdmin();
-
         System.out.println("1)manager\n2)customer");
         int role = scanner.nextInt();
         switch (role) {
@@ -40,7 +42,6 @@ public class Main {
 
     private static void addCustomer() throws ParseException {
         System.out.println("enter your info:(firstname,lastname,phoneNumber,nationalCode,gender)");
-        Customer customer = new Customer();
         String userInfo = scanner.next();
         String[] splitInfo = userInfo.split(",");
         String firstname = splitInfo[0];
@@ -52,6 +53,16 @@ public class Main {
         System.out.println("enter birthdate like this:(2021-11-08)");
         Date birthdate = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
 
+        Customer customer = CustomerBuilder.aCustomer()
+                .withFirstname(firstname)
+                .withLastname(lastname)
+                .withPhoneNumber(phoneNumber)
+                .withNationalCode(nationalCode)
+                .withGender(gender)
+                .withBirthdate(birthdate)
+                .build();
+
+        customerService.save(customer);
     }
 
     private static void adminActs() throws ParseException {
@@ -94,7 +105,7 @@ public class Main {
         String busPlaque = splitInfo[5];
         Bus bus = busService.findByPlaque(busPlaque);
         List<Seat> seats = bus.getSeats();
-        for (Seat seat :seats) {
+        for (Seat seat : seats) {
             Ticket ticket = new Ticket();
             ticket.setDate(date);
             ticket.setTime(time);
