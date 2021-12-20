@@ -12,7 +12,6 @@ public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer ticketNumber;
     @Temporal(value = TemporalType.DATE)
     private Date date;
     @Temporal(value = TemporalType.TIME)

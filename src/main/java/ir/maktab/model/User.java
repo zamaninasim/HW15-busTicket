@@ -20,7 +20,7 @@ public class User {
     private Gender gender;
     @Temporal(TemporalType.DATE)
     private Date birthdate;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
     private List<Address> address = new ArrayList<>();
     private String email;
 }

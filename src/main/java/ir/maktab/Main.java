@@ -2,10 +2,7 @@ package ir.maktab;
 
 import ir.maktab.enums.BusType;
 import ir.maktab.enums.Gender;
-import ir.maktab.model.Address;
-import ir.maktab.model.Admin;
-import ir.maktab.model.Bus;
-import ir.maktab.model.Company;
+import ir.maktab.model.*;
 import ir.maktab.model.builder.AdminBuilder;
 import ir.maktab.service.AdminService;
 import ir.maktab.service.BusService;
@@ -62,7 +59,9 @@ public class Main {
                 1)add new Admin
                 2)add new Company
                 3)add new Bus
-                4)add new Ticket""");
+                4)add new Ticket
+                5)show reports
+                """);
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:
@@ -75,6 +74,10 @@ public class Main {
                 addBus();
                 break;
             case 4:
+                System.out.println("enter ticket info:(date,time,Price");
+                Ticket ticket = new Ticket();
+                //ticket.setDate();
+
                 break;
         }
     }
