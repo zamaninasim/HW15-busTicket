@@ -17,12 +17,14 @@ public class Ticket {
     @Temporal(value = TemporalType.TIME)
     private Date time;
     private Long Price;
-    private Integer seatNumber;
+    //private Integer seatNumber;
     private City origin;
     private City destination;
     @ManyToOne
     private Company company;
     @ManyToOne
     private Bus bus;
+    @OneToOne
+    private Seat seat;
 
 }

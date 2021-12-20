@@ -94,8 +94,14 @@ public class Main {
         Bus bus = new Bus();
         bus.setPlaque(plaque);
         bus.setType(type);
-        bus.setAvailableSeat(availableSeat);
         bus.setCompany(company);
+
+        for (int i=0;i<=availableSeat;i++){
+            Seat seat = new Seat();
+            seat.setSeatNumber(i);
+            bus.getSeats().add(seat);
+        }
+
         busService.save(bus);
     }
 

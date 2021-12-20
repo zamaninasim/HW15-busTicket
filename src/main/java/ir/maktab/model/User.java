@@ -16,7 +16,7 @@ public class User {
     private Integer id;
     private String firstname;
     private String lastname;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     @Temporal(TemporalType.DATE)
     private Date birthdate;

@@ -13,9 +13,11 @@ public class Bus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String plaque;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private BusType type;
-    private Integer availableSeat;
+    //private Integer availableSeat;
+    @OneToMany
+    private List<Seat> seats;
     @ManyToOne
     private Company company;
     @OneToMany(mappedBy = "company")
