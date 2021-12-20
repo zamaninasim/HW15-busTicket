@@ -24,7 +24,6 @@
         <mapping class="ir.maktab.model.Ticket"/>
         <mapping class="ir.maktab.model.Bus"/>
         <mapping class="ir.maktab.model.Company"/>
-        <mapping class="ir.maktab.model.Address"/>
         <mapping class="ir.maktab.model.Seat"/>
 
 

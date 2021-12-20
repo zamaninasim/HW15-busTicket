@@ -16,11 +16,11 @@ public class AdminDao extends BaseDao {
         session.close();
     }
 
-    public Optional<Admin> findByNationalCode(String username) {
+    public Optional<Admin> findByNationalCode(String nationalCode) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         Query<Admin> query = session.createQuery("FROM Admin a WHERE a.nationalCode=:value");
-        query.setParameter("value", username);
+        query.setParameter("value", nationalCode);
         Optional<Admin> admin = Optional.ofNullable(query.uniqueResult());
         transaction.commit();
         session.close();

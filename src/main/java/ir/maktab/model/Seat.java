@@ -14,6 +14,14 @@ public class Seat {
     private Integer seatNumber;
     @Enumerated(EnumType.STRING)
     private SeatType seatType;
-    @ManyToOne()
+    @ManyToOne
     private Bus bus;
+
+    @Override
+    public String toString() {
+        return ", seatNumber=" + seatNumber +
+                ", seatType=" + seatType +
+                ", busType=" + bus.getType() +
+                ", company=" + bus.getCompany().getName();
+    }
 }

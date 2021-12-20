@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.TimeZone;
 
 @Data
 @Entity
@@ -24,4 +23,17 @@ public class Ticket {
     private City destination;
     @OneToOne
     private Seat seat;
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + id +
+                ", date=" + date +
+                ", time=" + time +
+                ", Price=" + Price +
+                ", origin=" + origin +
+                ", destination=" + destination +
+                seat +
+                "}\n";
+    }
 }

@@ -25,7 +25,7 @@ public class Main {
     static final CustomerService customerService = new CustomerService();
 
     public static void main(String[] args) throws ParseException {
-        //addAdmin();
+        //
         System.out.println("1)manager\n2)customer");
         int role = scanner.nextInt();
         switch (role) {
@@ -33,9 +33,7 @@ public class Main {
                 adminLogin();
                 break;
             case 2:
-                addCustomer();
-
-
+                customerLogin();
                 break;
         }
     }
@@ -64,6 +62,51 @@ public class Main {
 
         customerService.save(customer);
     }
+
+    private static void customerLogin() throws ParseException {
+        System.out.println("nationalCode:");
+        String nationalCode = scanner.next();
+        try {
+            Customer customer = customerService.findByNationalCode(nationalCode);
+            customerActs();
+
+        } catch (RuntimeException e) {
+            addCustomer();
+            customerActs();
+        }
+    }
+
+    private static void customerActs() throws ParseException {
+        System.out.println("""
+                1)search for ticket
+                """);
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                System.out.println("origin:");
+                City origin = City.getValue(scanner.next());
+                System.out.println("destination:");
+                City destination = City.getValue(scanner.next());
+                System.out.println("do you want to enter date:1)yes 2)no");
+                int yesOrNo = scanner.nextInt();
+                switch (yesOrNo){
+                    case 1:
+                        System.out.println("enter date(yyyy-MM-dd):");
+                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
+                        List<Ticket> searchWithDate = ticketService.search(origin, destination, date);
+                        System.out.println(searchWithDate);
+                        break;
+                    case 2:
+                        List<Ticket> searchWithoutDate = ticketService.search(origin, destination, null);
+                        System.out.println(searchWithoutDate);
+                        break;
+                }
+
+                break;
+        }
+
+    }
+
 
     private static void adminActs() throws ParseException {
         System.out.println("""
@@ -117,7 +160,7 @@ public class Main {
         }
     }
 
-    private static void adminLogin() {
+    private static void adminLogin() throws ParseException {
         System.out.println("nationalCode:");
         String nationalCode = scanner.next();
         Boolean repeat = true;
@@ -134,6 +177,8 @@ public class Main {
                 }
             } catch (RuntimeException | ParseException e) {
                 System.out.println(e.getMessage());
+                addAdmin();
+                repeat = false;
             }
         } while (repeat);
     }

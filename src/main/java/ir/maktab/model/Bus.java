@@ -16,11 +16,20 @@ public class Bus {
     private String plaque;
     @Enumerated(EnumType.STRING)
     private BusType type;
-    @OneToMany(mappedBy = "bus")
+    @OneToMany(mappedBy = "bus",fetch = FetchType.EAGER)
     private List<Seat> seats=new ArrayList<>();
     private Integer availableSeat;
     @ManyToOne
     private Company company;
-/*    @OneToMany()
-    private List<Ticket> tickets;*/
+
+    @Override
+    public String toString() {
+        return "Bus{" +
+                "id=" + id +
+                ", plaque='" + plaque + '\'' +
+                ", type=" + type +
+                ", availableSeat=" + availableSeat +
+                ", company=" + company.getName() +
+                '}';
+    }
 }
