@@ -1,34 +1,25 @@
 package ir.maktab.model.builder;
 
 import ir.maktab.enums.Gender;
-import ir.maktab.model.Address;
 import ir.maktab.model.Admin;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public final class AdminBuilder {
-    private String username;
     private String password;
     private Integer id;
     private String firstname;
     private String lastname;
+    private String phoneNumber;
+    private String nationalCode;
     private Gender gender;
     private Date birthdate;
-    private List<Address> address;
-    private String email;
 
     private AdminBuilder() {
     }
 
     public static AdminBuilder anAdmin() {
         return new AdminBuilder();
-    }
-
-    public AdminBuilder withUsername(String username) {
-        this.username = username;
-        return this;
     }
 
     public AdminBuilder withPassword(String password) {
@@ -51,6 +42,16 @@ public final class AdminBuilder {
         return this;
     }
 
+    public AdminBuilder withPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        return this;
+    }
+
+    public AdminBuilder withNationalCode(String nationalCode) {
+        this.nationalCode = nationalCode;
+        return this;
+    }
+
     public AdminBuilder withGender(Gender gender) {
         this.gender = gender;
         return this;
@@ -61,27 +62,16 @@ public final class AdminBuilder {
         return this;
     }
 
-    public AdminBuilder withAddress() {
-        this.address = new ArrayList<>();
-        return this;
-    }
-
-    public AdminBuilder withEmail(String email) {
-        this.email = email;
-        return this;
-    }
-
     public Admin build() {
         Admin admin = new Admin();
-        admin.setUsername(username);
         admin.setPassword(password);
         admin.setId(id);
         admin.setFirstname(firstname);
         admin.setLastname(lastname);
+        admin.setPhoneNumber(phoneNumber);
+        admin.setNationalCode(nationalCode);
         admin.setGender(gender);
         admin.setBirthdate(birthdate);
-        admin.setAddress(address);
-        admin.setEmail(email);
         return admin;
     }
 }

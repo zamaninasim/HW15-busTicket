@@ -31,8 +31,27 @@ public class Main {
                 adminLogin();
                 break;
             case 2:
+                addCustomer();
+
+
                 break;
         }
+    }
+
+    private static void addCustomer() throws ParseException {
+        System.out.println("enter your info:(firstname,lastname,phoneNumber,nationalCode,gender)");
+        Customer customer = new Customer();
+        String userInfo = scanner.next();
+        String[] splitInfo = userInfo.split(",");
+        String firstname = splitInfo[0];
+        String lastname = splitInfo[1];
+        String phoneNumber = splitInfo[2];
+        String nationalCode = splitInfo[3];
+        Gender gender = Gender.getValue(splitInfo[4]);
+
+        System.out.println("enter birthdate like this:(2021-11-08)");
+        Date birthdate = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
+
     }
 
     private static void adminActs() throws ParseException {
@@ -56,6 +75,10 @@ public class Main {
                 break;
             case 4:
                 addTicket();
+                break;
+            case 5:
+                //TODO
+                break;
         }
     }
 
@@ -84,14 +107,14 @@ public class Main {
     }
 
     private static void adminLogin() {
-        System.out.println("username:");
-        String username = scanner.next();
+        System.out.println("nationalCode:");
+        String nationalCode = scanner.next();
         Boolean repeat = true;
         do {
             System.out.println("password");
             String password = scanner.next();
             try {
-                Admin admin = adminService.findByUsername(username);
+                Admin admin = adminService.findByNationalCode(nationalCode);
                 if (admin.getPassword().equals(password)) {
                     adminActs();
                     repeat = false;
@@ -138,40 +161,28 @@ public class Main {
     }
 
     private static void addAdmin() throws ParseException {
-        System.out.println("enter new admin info:(firstname,lastname,gender,email,username)");
+        System.out.println("enter new admin info:(firstname,lastname,phoneNumber,nationalCode,gender)");
         String userInfo = scanner.next();
         String[] splitInfo = userInfo.split(",");
         String firstname = splitInfo[0];
         String lastname = splitInfo[1];
-        Gender gender = Gender.getValue(splitInfo[2]);
-        String email = splitInfo[3];
-        String username = splitInfo[4];
+        String phoneNumber = splitInfo[2];
+        String nationalCode = splitInfo[3];
+        Gender gender = Gender.getValue(splitInfo[4]);
+
         System.out.println("enter birthdate like this:(2021-11-08)");
         Date birthdate = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
-
-        System.out.println("enter new admin Address info:(country,city,postcode)");
-        String addressInfo = scanner.next();
-        String[] splitAddressInfo = addressInfo.split(",");
-        String country = splitAddressInfo[0];
-        String city = splitAddressInfo[1];
-        Integer postcode = Integer.parseInt(splitAddressInfo[2]);
-        Address address = new Address();
-        address.setCountry(country);
-        address.setCity(city);
-        address.setPostcode(postcode);
 
         Admin admin = AdminBuilder.anAdmin()
                 .withFirstname(firstname)
                 .withLastname(lastname)
-                .withEmail(email)
-                .withBirthdate(birthdate)
+                .withPhoneNumber(phoneNumber)
+                .withNationalCode(nationalCode)
                 .withGender(gender)
-                .withUsername(username)
+                .withBirthdate(birthdate)
                 .withPassword("admin")
-                .withAddress()
                 .build();
 
-        admin.getAddress().add(address);
         adminService.save(admin);
     }
 }

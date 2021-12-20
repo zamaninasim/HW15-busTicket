@@ -12,8 +12,8 @@ public class AdminService {
         adminDao.save(admin);
     }
 
-    public Admin findByUsername(String username) throws RuntimeException {
-        Optional<Admin> admin = adminDao.findByUsername(username);
+    public Admin findByNationalCode(String nationalCode) throws RuntimeException {
+        Optional<Admin> admin = adminDao.findByNationalCode(nationalCode);
         if (admin.isPresent()) {
             final Admin found = admin.get();
             return found;

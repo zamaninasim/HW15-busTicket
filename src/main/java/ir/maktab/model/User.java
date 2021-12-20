@@ -16,11 +16,10 @@ public class User {
     private Integer id;
     private String firstname;
     private String lastname;
+    private String phoneNumber;
+    private String nationalCode;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Temporal(TemporalType.DATE)
     private Date birthdate;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
-    private List<Address> address = new ArrayList<>();
-    private String email;
 }
