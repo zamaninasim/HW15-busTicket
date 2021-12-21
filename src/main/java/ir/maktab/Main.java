@@ -83,28 +83,47 @@ public class Main {
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:
-                System.out.println("origin:");
-                City origin = City.getValue(scanner.next());
-                System.out.println("destination:");
-                City destination = City.getValue(scanner.next());
-                System.out.println("do you want to enter date:1)yes 2)no");
-                int yesOrNo = scanner.nextInt();
-                switch (yesOrNo){
-                    case 1:
-                        System.out.println("enter date(yyyy-MM-dd):");
-                        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
-                        List<Ticket> searchWithDate = ticketService.search(origin, destination, date);
-                        System.out.println(searchWithDate);
-                        break;
-                    case 2:
-                        List<Ticket> searchWithoutDate = ticketService.search(origin, destination, null);
-                        System.out.println(searchWithoutDate);
-                        break;
-                }
+                searchForTicket();
+        }
 
+    }
+
+    private static void searchForTicket() throws ParseException {
+        System.out.println("origin:");
+        City origin = City.getValue(scanner.next());
+        System.out.println("destination:");
+        City destination = City.getValue(scanner.next());
+        System.out.println("do you want to enter date:1)yes 2)no");
+        int yesOrNo = scanner.nextInt();
+        System.out.println("enter Number of results");
+        int numberOfResults = scanner.nextInt();
+        switch (yesOrNo) {
+            case 1:
+                System.out.println("enter date(yyyy-MM-dd):");
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
+                List<Ticket> searchWithDate = ticketService.search(origin, destination, date);
+                int allResult = searchWithDate.size();
+                int firstResult = 0;
+                do {
+                    List<Ticket> page = ticketService.listPaginatedTickets(origin, destination, date, firstResult, numberOfResults);
+                    firstResult = firstResult + numberOfResults;
+                    System.out.println(page);
+                    System.out.println("************************");
+                } while (firstResult < allResult);
+                break;
+            case 2:
+                List<Ticket> searchWithoutDate = ticketService.search(origin, destination, null);
+                int allResultWD = searchWithoutDate.size();
+                int firstResultWD= 0;
+                do {
+                    List<Ticket> page = ticketService.listPaginatedTickets(origin, destination, null, firstResultWD, numberOfResults);
+                    firstResultWD = firstResultWD + numberOfResults;
+                    System.out.println(page);
+                } while (firstResultWD < allResultWD);
                 break;
         }
 
+        return;
     }
 
 

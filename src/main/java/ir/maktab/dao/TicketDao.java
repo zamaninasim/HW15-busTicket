@@ -30,7 +30,6 @@ public class TicketDao extends BaseDao {
         Criterion dateCond = Restrictions.eq("date", date);
         Criterion originAndDestinationCond = Restrictions.and(originCond, destinationCond);
         if (date != null) {
-
             criteria.add(Restrictions.and(originAndDestinationCond, dateCond));
         } else {
             criteria.add(originAndDestinationCond);
@@ -40,5 +39,26 @@ public class TicketDao extends BaseDao {
         transaction.commit();
         session.close();
         return list;
+    }
+
+    public List<Ticket> listPaginatedTickets(City origin, City destination, Date date,int first,int max) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        Criteria criteria = session.createCriteria(Ticket.class);
+        Criterion originCond = Restrictions.eq("origin", origin);
+        Criterion destinationCond = Restrictions.eq("destination", destination);
+        Criterion dateCond = Restrictions.eq("date", date);
+        Criterion originAndDestinationCond = Restrictions.and(originCond, destinationCond);
+        if (date != null) {
+            criteria.add(Restrictions.and(originAndDestinationCond, dateCond));
+        } else {
+            criteria.add(originAndDestinationCond);
+        }
+        criteria.setFirstResult(first);
+        criteria.setMaxResults(max);
+        List<Ticket> tickets = criteria.list();
+        transaction.commit();
+        session.close();
+        return tickets;
     }
 }
