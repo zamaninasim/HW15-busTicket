@@ -22,6 +22,7 @@ public class Seat {
         return ", seatNumber=" + seatNumber +
                 ", seatType=" + seatType +
                 ", busType=" + bus.getType() +
+                ", busAvailableSeat=" + bus.getAvailableSeat() +
                 ", company=" + bus.getCompany().getName();
     }
 }

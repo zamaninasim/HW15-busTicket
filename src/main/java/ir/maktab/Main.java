@@ -95,37 +95,57 @@ public class Main {
         City destination = City.getValue(scanner.next());
         System.out.println("do you want to enter date:1)yes 2)no");
         int yesOrNo = scanner.nextInt();
-        System.out.println("enter Number of results");
-        int numberOfResults = scanner.nextInt();
         switch (yesOrNo) {
             case 1:
                 System.out.println("enter date(yyyy-MM-dd):");
                 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
-                List<Ticket> searchWithDate = ticketService.search(origin, destination, date);
-                int allResult = searchWithDate.size();
-                int firstResult = 0;
-                do {
-                    List<Ticket> page = ticketService.listPaginatedTickets(origin, destination, date, firstResult, numberOfResults);
-                    firstResult = firstResult + numberOfResults;
-                    System.out.println(page);
-                    System.out.println("************************");
-                } while (firstResult < allResult);
+                showTicketWithPagination(origin, destination, date);
                 break;
             case 2:
-                List<Ticket> searchWithoutDate = ticketService.search(origin, destination, null);
-                int allResultWD = searchWithoutDate.size();
-                int firstResultWD= 0;
-                do {
-                    List<Ticket> page = ticketService.listPaginatedTickets(origin, destination, null, firstResultWD, numberOfResults);
-                    firstResultWD = firstResultWD + numberOfResults;
-                    System.out.println(page);
-                } while (firstResultWD < allResultWD);
+                showTicketWithPagination(origin, destination, null);
                 break;
         }
-
-        return;
     }
 
+    private static void showTicketWithPagination(City origin, City destination, Date date) {
+        System.out.print("enter Number of results:");
+        int maxResultInPage = scanner.nextInt();
+        int startResult = 0;
+        while (true) {
+            List<Ticket> tickets = ticketService.listPaginatedTickets(origin, destination, date, startResult, maxResultInPage);
+            System.out.println(tickets);
+            int result = tickets.size();
+            //TODO
+            //result safhe baad ro begiram behtare
+            forContinuing:
+            while (true) {
+                System.out.print("1)show details 2)nextPage 3)previousPage 4)exit");
+                int choice = scanner.nextInt();
+                switch (choice) {
+                    case 1:
+                        //showTicketDetail();
+                        //TODO
+                        break;
+                    case 2:
+                        if (result < maxResultInPage) {
+                            System.out.println("no next page!");
+                            continue forContinuing;
+                        }
+                        startResult += maxResultInPage;
+                        break forContinuing;
+                    case 3:
+                        if (startResult == 0) {
+                            System.out.println("no previous page!");
+                            continue forContinuing;
+                        }
+                        startResult -= maxResultInPage;
+                        break forContinuing;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
 
     private static void adminActs() throws ParseException {
         System.out.println("""
@@ -182,7 +202,7 @@ public class Main {
     private static void adminLogin() throws ParseException {
         System.out.println("nationalCode:");
         String nationalCode = scanner.next();
-        Boolean repeat = true;
+        boolean repeat = true;
         do {
             System.out.println("password");
             String password = scanner.next();
@@ -218,7 +238,7 @@ public class Main {
         bus.setAvailableSeat(availableSeat);
         busService.save(bus);
 
-        for (int i = 0; i <= availableSeat; i++) {
+        for (int i = 1; i <= availableSeat; i++) {
             Seat seat = new Seat();
             seat.setSeatNumber(i);
             seat.setSeatType(SeatType.AVAILABLE);
