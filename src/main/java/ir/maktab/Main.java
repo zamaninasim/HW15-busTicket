@@ -118,9 +118,8 @@ public class Main {
         while (true) {
             List<TripDto> trips = tripService.listTripByPaginated(origin, destination, date, startResult, maxResultInPage);
             System.out.println(trips);
-            int result = trips.size();
-            //TODO
-            //result safhe baad ro begiram behtare
+            List<TripDto> nextTrips = tripService.listTripByPaginated(origin, destination, date, startResult + maxResultInPage, maxResultInPage);
+            int result = nextTrips.size();
             showPage:
             while (true) {
                 System.out.println("1)show details 2)nextPage 3)previousPage 4)exit");
