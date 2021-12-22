@@ -77,12 +77,12 @@ public class Main {
 
     private static void customerActs() throws ParseException {
         System.out.println("""
-                1)search for ticket
+                1)search for trip
                 """);
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:
-                searchForTicket();
+                searchForTrip();
                 break;
             case 2:
                 break;
@@ -90,41 +90,21 @@ public class Main {
 
     }
 
-    private static void searchForTicket() throws ParseException {
+    private static void searchForTrip() throws ParseException {
         System.out.println("origin:");
         City origin = City.getValue(scanner.next());
         System.out.println("destination:");
         City destination = City.getValue(scanner.next());
         System.out.println("do you want to enter date:1)yes 2)no");
         int yesOrNo = scanner.nextInt();
-        /*System.out.println("enter Number of results");
-        int maxResultInPage = scanner.nextInt();*/
         switch (yesOrNo) {
             case 1:
                 System.out.println("enter date(yyyy-MM-dd):");
                 Date date = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
                 showTripWithPagination(origin, destination, date);
-                //pagination(origin, destination, numberOfResults, date);
-                /*List<Ticket> searchWithDate = ticketService.search(origin, destination, date);
-                int allResult = searchWithDate.size();
-                do {
-                    List<Ticket> page = ticketService.listPaginatedTickets(origin, destination, date, firstResult, numberOfResults);
-                    firstResult = firstResult + numberOfResults;
-                    System.out.println(page);
-                    System.out.println("************************");
-                } while (firstResult < allResult);*/
                 break;
             case 2:
                 showTripWithPagination(origin, destination, null);
-                //pagination(origin, destination, numberOfResults, null);
-             /*   List<Ticket> searchWithoutDate = ticketService.search(origin, destination, null);
-                int allResultWD = searchWithoutDate.size();
-                int firstResultWD = 0;
-                do {
-                    List<Ticket> page = ticketService.listPaginatedTickets(origin, destination, null, firstResultWD, numberOfResults);
-                    firstResultWD = firstResultWD + numberOfResults;
-                    System.out.println(page);
-                } while (firstResultWD < allResultWD);*/
                 break;
         }
     }
@@ -133,13 +113,14 @@ public class Main {
         System.out.print("enter Number of results:");
         int maxResultInPage = scanner.nextInt();
         int startResult = 0;
+        exit:
         while (true) {
             List<Trip> trips = tripService.listTripByPaginated(origin, destination, date, startResult, maxResultInPage);
             System.out.println(trips);
             int result = trips.size();
             //TODO
             //result safhe baad ro begiram behtare
-            forContinuing:
+            showPage:
             while (true) {
                 System.out.print("1)show details 2)nextPage 3)previousPage 4)exit");
                 int choice = scanner.nextInt();
@@ -151,19 +132,19 @@ public class Main {
                     case 2:
                         if (result < maxResultInPage) {
                             System.out.println("no next page!");
-                            continue forContinuing;
+                            continue showPage;
                         }
                         startResult += maxResultInPage;
-                        break forContinuing;
+                        break showPage;
                     case 3:
                         if (startResult == 0) {
                             System.out.println("no previous page!");
-                            continue forContinuing;
+                            continue showPage;
                         }
                         startResult -= maxResultInPage;
-                        break forContinuing;
+                        break showPage;
                     default:
-                        break;
+                        break exit;
                 }
             }
         }
