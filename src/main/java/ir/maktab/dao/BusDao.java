@@ -19,7 +19,7 @@ public class BusDao extends BaseDao {
     public Optional<Bus> findByPlaque(String plaque) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        Query<Bus> query = session.createQuery("FROM Bus b join fetch b.seats WHERE b.plaque=:value");
+        Query<Bus> query = session.createQuery("FROM Bus b WHERE b.plaque=:value");
         query.setParameter("value", plaque);
         Optional<Bus> bus = Optional.ofNullable(query.uniqueResult());
         transaction.commit();

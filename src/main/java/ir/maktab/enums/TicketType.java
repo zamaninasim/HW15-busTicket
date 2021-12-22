@@ -1,5 +1,5 @@
 package ir.maktab.enums;
 
-public enum SeatType {
+public enum TicketType {
     AVAILABLE, UNAVAILABLE;
 }

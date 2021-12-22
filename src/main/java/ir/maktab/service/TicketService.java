@@ -15,11 +15,4 @@ public class TicketService {
         ticketDao.save(ticket);
     }
 
-    /*public List<Ticket> search(City origin, City destination, Date date) {
-        return ticketDao.search(origin,destination,date);
-    }*/
-
-    public List<Ticket> listPaginatedTickets(City origin, City destination, Date date,int startResult,int maxResultInPage) {
-        return ticketDao.listPaginatedTickets(origin,destination,date,startResult,maxResultInPage);
-    }
 }

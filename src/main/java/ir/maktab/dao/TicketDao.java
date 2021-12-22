@@ -20,45 +20,5 @@ public class TicketDao extends BaseDao {
         session.close();
     }
 
-/*    public List<Ticket> search(City origin, City destination, Date date) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
 
-        Criteria criteria = session.createCriteria(Ticket.class);
-        Criterion originCond = Restrictions.eq("origin", origin);
-        Criterion destinationCond = Restrictions.eq("destination", destination);
-        Criterion dateCond = Restrictions.eq("date", date);
-        Criterion originAndDestinationCond = Restrictions.and(originCond, destinationCond);
-        if (date != null) {
-            criteria.add(Restrictions.and(originAndDestinationCond, dateCond));
-        } else {
-            criteria.add(originAndDestinationCond);
-        }
-        List list = criteria.list();
-
-        transaction.commit();
-        session.close();
-        return list;
-    }*/
-
-    public List<Ticket> listPaginatedTickets(City origin, City destination, Date date,int startResult,int maxResultInPage) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        Criteria criteria = session.createCriteria(Ticket.class);
-        Criterion originCond = Restrictions.eq("origin", origin);
-        Criterion destinationCond = Restrictions.eq("destination", destination);
-        Criterion dateCond = Restrictions.eq("date", date);
-        Criterion originAndDestinationCond = Restrictions.and(originCond, destinationCond);
-        if (date != null) {
-            criteria.add(Restrictions.and(originAndDestinationCond, dateCond));
-        } else {
-            criteria.add(originAndDestinationCond);
-        }
-        criteria.setFirstResult(startResult);
-        criteria.setMaxResults(maxResultInPage);
-        List<Ticket> tickets = criteria.list();
-        transaction.commit();
-        session.close();
-        return tickets;
-    }
 }
