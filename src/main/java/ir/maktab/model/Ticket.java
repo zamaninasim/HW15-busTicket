@@ -1,5 +1,6 @@
 package ir.maktab.model;
 
+import ir.maktab.enums.TicketType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,8 +12,12 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer seatNumber;
+    @Enumerated(EnumType.STRING)
+    private TicketType ticketType;
     @ManyToOne
     private Trip trip;
+    @OneToOne
+    private Customer owner;
 
     @Override
     public String toString() {

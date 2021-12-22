@@ -1,9 +1,7 @@
 package ir.maktab;
 
 import ir.maktab.dto.TripDto;
-import ir.maktab.enums.BusType;
-import ir.maktab.enums.City;
-import ir.maktab.enums.Gender;
+import ir.maktab.enums.*;
 import ir.maktab.model.*;
 import ir.maktab.model.builder.AdminBuilder;
 import ir.maktab.model.builder.CustomerBuilder;
@@ -11,6 +9,7 @@ import ir.maktab.service.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -23,9 +22,9 @@ public class Main {
     static final TripService tripService = new TripService();
     static final TicketService ticketService = new TicketService();
     static final CustomerService customerService = new CustomerService();
+    static final ReservationService reservationService = new ReservationService();
 
     public static void main(String[] args) throws ParseException {
-
         System.out.println("1)manager\n2)customer");
         int role = scanner.nextInt();
         switch (role) {
@@ -38,7 +37,7 @@ public class Main {
         }
     }
 
-    private static void addCustomer() throws ParseException {
+    private static Customer addCustomer() throws ParseException {
         System.out.println("enter your info:(firstname,lastname,phoneNumber,nationalCode,gender)");
         String userInfo = scanner.next();
         String[] splitInfo = userInfo.split(",");
@@ -61,24 +60,27 @@ public class Main {
                 .build();
 
         customerService.save(customer);
+        return customer;
     }
 
     private static void customerLogin() throws ParseException {
         System.out.println("nationalCode:");
         String nationalCode = scanner.next();
         try {
-            Customer customer = customerService.findByNationalCode(nationalCode);
-            customerActs();
+            customerService.findByNationalCode(nationalCode);
+            customerActs(nationalCode);
 
         } catch (RuntimeException e) {
             addCustomer();
-            customerActs();
+            customerActs(nationalCode);
         }
     }
 
-    private static void customerActs() throws ParseException {
+    private static void customerActs(String nationalCode) throws ParseException {
         System.out.println("""
                 1)search for trip
+                2)buy ticket
+                3)exit
                 """);
         int choice = scanner.nextInt();
         switch (choice) {
@@ -86,9 +88,50 @@ public class Main {
                 searchForTrip();
                 break;
             case 2:
+                reservation(nationalCode);
+                break;
+            case 3:
                 break;
         }
 
+    }
+
+    private static void reservation(String nationalCode) throws ParseException {
+        Customer customer = customerService.findByNationalCode(nationalCode);
+        System.out.println("enter trip id:");
+        int id = scanner.nextInt();
+        Trip trip = tripService.get(id);
+        Bus bus = trip.getBus();
+        System.out.println("Number of tickets required:");
+        int numberOfTickets = scanner.nextInt();
+        List<Ticket> availableSeats = ticketService.findAvailableSeatByTrip(trip);
+        availableSeats.stream().map(Ticket::getSeatNumber).forEach(number -> System.out.print(number + " , "));
+        System.out.println();
+        List<Ticket> tickets = new ArrayList<>();
+        for (int i = 0; i < numberOfTickets; i++) {
+            System.out.println("enter seat number");
+            System.out.println("you have to enter ticket owner info");
+            Customer owner = addCustomer();
+            int seatNumber = scanner.nextInt();
+            Ticket ticket = ticketService.findTicketBySeatNumber(seatNumber, trip);
+            ticket.setTicketType(TicketType.UNAVAILABLE);
+            ticket.setOwner(owner);
+            ticketService.update(ticket);
+            tickets.add(ticket);
+            Integer availableSeat = bus.getAvailableSeat();
+            int newAvailableSeat = availableSeat - 1;
+            bus.setAvailableSeat(newAvailableSeat);
+        }
+        Long tripPrice = trip.getPrice();
+        long totalPrice = tripPrice * numberOfTickets;
+
+        Reservation reservation = new Reservation();
+        reservation.setTickets(tickets);
+        reservation.setCustomer(customer);
+        reservation.setTotalPrice(totalPrice);
+        reservation.setReservationType(ReservationType.PROCESSING);
+
+        reservationService.save(reservation);
     }
 
     private static void searchForTrip() throws ParseException {
@@ -126,8 +169,7 @@ public class Main {
                 int choice = scanner.nextInt();
                 switch (choice) {
                     case 1:
-                        //showTicketDetail();
-                        //TODO
+                        showTicketDetail();
                         break;
                     case 2:
                         if (result < maxResultInPage) {
@@ -148,6 +190,13 @@ public class Main {
                 }
             }
         }
+    }
+
+    private static void showTicketDetail() {
+        System.out.println("enter trip Id:");
+        int id = scanner.nextInt();
+        Trip trip = tripService.get(id);
+        System.out.println(trip);
     }
 
     private static void adminActs() throws ParseException {
@@ -190,7 +239,7 @@ public class Main {
         String nationalCode = scanner.next();
         boolean repeat = true;
         do {
-            System.out.println("password");
+            System.out.println("password:");
             String password = scanner.next();
             try {
                 Admin admin = adminService.findByNationalCode(nationalCode);
@@ -222,6 +271,7 @@ public class Main {
         bus.setType(type);
         bus.setCompany(company);
         bus.setAvailableSeat(availableSeat);
+        bus.setNumberOfSeats(availableSeat);
         busService.save(bus);
     }
 
@@ -258,6 +308,7 @@ public class Main {
         for (int i = 1; i <= availableSeat; i++) {
             Ticket ticket = new Ticket();
             ticket.setSeatNumber(i);
+            ticket.setTicketType(TicketType.AVAILABLE);
             ticket.setTrip(trip);
             ticketService.save(ticket);
         }

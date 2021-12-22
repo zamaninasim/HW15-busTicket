@@ -15,6 +15,13 @@ public class BusDao extends BaseDao {
         transaction.commit();
         session.close();
     }
+    public void update(Bus bus) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(bus);
+        transaction.commit();
+        session.close();
+    }
 
     public Optional<Bus> findByPlaque(String plaque) {
         Session session = sessionFactory.openSession();

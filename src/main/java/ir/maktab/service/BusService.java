@@ -12,6 +12,10 @@ public class BusService {
         busDao.save(bus);
     }
 
+    public void update(Bus bus) {
+        busDao.update(bus);
+    }
+
     public Bus findByPlaque(String plaque) {
         Optional<Bus> bus = busDao.findByPlaque(plaque);
         if (bus.isPresent()) {

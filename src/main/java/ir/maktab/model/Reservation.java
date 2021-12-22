@@ -1,5 +1,6 @@
 package ir.maktab.model;
 
+import ir.maktab.enums.ReservationType;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -19,4 +20,7 @@ public class Reservation {
     private Customer customer;
     @CreationTimestamp
     private Date reserveDate;
+    @Enumerated(EnumType.STRING)
+    private ReservationType reservationType;
+    private long totalPrice;
 }

@@ -17,6 +17,7 @@ public class Bus {
     @Enumerated(EnumType.STRING)
     private BusType type;
     private Integer availableSeat;
+    private Integer numberOfSeats;
     @ManyToOne
     private Company company;
 

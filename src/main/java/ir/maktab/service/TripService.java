@@ -16,11 +16,16 @@ public class TripService {
         tripDao.save(trip);
     }
 
+    public Trip get(Integer id) {
+        return tripDao.get(id);
+    }
+
     public List<TripDto> listTripByPaginated(City origin, City destination, Date date, int startResult, int maxResultInPage) {
         List<Trip> trips = tripDao.listTripByPaginated(origin, destination, date, startResult, maxResultInPage);
         List<TripDto> tripDtos = new ArrayList<>();
         for (Trip trip : trips) {
             TripDto tripDto = new TripDto();
+            tripDto.setId(trip.getId());
             tripDto.setDate(trip.getDate());
             tripDto.setTime(trip.getTime());
             tripDto.setPrice(trip.getPrice());

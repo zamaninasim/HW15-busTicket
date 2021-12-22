@@ -1,18 +1,13 @@
 package ir.maktab.dao;
 
-import ir.maktab.dto.TripDto;
 import ir.maktab.enums.City;
-import ir.maktab.model.Ticket;
 import ir.maktab.model.Trip;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.Transformers;
 
-import javax.xml.transform.Transformer;
 import java.util.Date;
 import java.util.List;
 
@@ -25,10 +20,19 @@ public class TripDao extends BaseDao {
         transaction.commit();
         session.close();
     }
+    public Trip get(Integer id) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        Trip trip = session.get(Trip.class, id);
+        transaction.commit();
+        session.close();
+        return trip;
+    }
+
     public List<Trip> listTripByPaginated(City origin, City destination, Date date, int startResult, int maxResultInPage) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        Criteria criteria = session.createCriteria(Trip.class,"t");
+        Criteria criteria = session.createCriteria(Trip.class, "t");
         /*criteria.createAlias("t.bus","b");
         criteria.createAlias("b.company","c");*/
         Criterion originCond = Restrictions.eq("t.origin", origin);
