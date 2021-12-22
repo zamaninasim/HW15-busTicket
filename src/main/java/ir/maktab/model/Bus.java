@@ -19,4 +19,14 @@ public class Bus {
     private Integer availableSeat;
     @ManyToOne
     private Company company;
+
+    @Override
+    public String toString() {
+        return "Bus{" +
+                "id=" + id +
+                ", plaque='" + plaque + '\'' +
+                ", type=" + type +
+                ", availableSeat=" + availableSeat +
+                '}';
+    }
 }

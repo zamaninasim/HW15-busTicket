@@ -12,6 +12,6 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    @OneToMany(mappedBy = "company")
+    @OneToMany(mappedBy = "company",fetch = FetchType.EAGER)
     private List<Bus> buses;
 }

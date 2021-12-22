@@ -1,5 +1,6 @@
 package ir.maktab.dao;
 
+import ir.maktab.dto.TripDto;
 import ir.maktab.enums.City;
 import ir.maktab.model.Ticket;
 import ir.maktab.model.Trip;
@@ -7,8 +8,11 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 
+import javax.xml.transform.Transformer;
 import java.util.Date;
 import java.util.List;
 
@@ -24,15 +28,34 @@ public class TripDao extends BaseDao {
     public List<Trip> listTripByPaginated(City origin, City destination, Date date, int startResult, int maxResultInPage) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        Criteria criteria = session.createCriteria(Trip.class);
-        Criterion originCond = Restrictions.eq("origin", origin);
-        Criterion destinationCond = Restrictions.eq("destination", destination);
-        Criterion dateCond = Restrictions.eq("date", date);
+        Criteria criteria = session.createCriteria(Trip.class,"t");
+        /*criteria.createAlias("t.bus","b");
+        criteria.createAlias("b.company","c");*/
+        Criterion originCond = Restrictions.eq("t.origin", origin);
+        Criterion destinationCond = Restrictions.eq("t.destination", destination);
+        Criterion dateCond = Restrictions.eq("t.date", date);
         Criterion originAndDestinationCond = Restrictions.and(originCond, destinationCond);
         if (date != null) {
             criteria.add(Restrictions.and(originAndDestinationCond, dateCond));
+            /*criteria.setProjection(Projections.projectionList()
+                    .add(Projections.property("t.time").as("time"))
+                    .add(Projections.property("t.date").as("date"))
+                    .add(Projections.property("t.price").as("Price"))
+                    .add(Projections.property("c.name").as("companyName"))
+                    .add(Projections.property("b.type").as("busType"))
+                    .add(Projections.property("b.availableSeat").as("availableSeat")));
+            criteria.setResultTransformer(Transformers.aliasToBean(TripDto.class));*/
+
         } else {
             criteria.add(originAndDestinationCond);
+            /*criteria.setProjection(Projections.projectionList()
+                    .add(Projections.property("t.time").as("time"))
+                    .add(Projections.property("t.date").as("date"))
+                    .add(Projections.property("t.price").as("Price"))
+                    .add(Projections.property("c.name").as("companyName"))
+                    .add(Projections.property("b.type").as("busType"))
+                    .add(Projections.property("b.availableSeat").as("availableSeat")));
+            criteria.setResultTransformer(Transformers.aliasToBean(TripDto.class));*/
         }
         criteria.setFirstResult(startResult);
         criteria.setMaxResults(maxResultInPage);

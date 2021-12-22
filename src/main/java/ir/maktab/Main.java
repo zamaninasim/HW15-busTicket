@@ -1,5 +1,6 @@
 package ir.maktab;
 
+import ir.maktab.dto.TripDto;
 import ir.maktab.enums.BusType;
 import ir.maktab.enums.City;
 import ir.maktab.enums.Gender;
@@ -110,19 +111,19 @@ public class Main {
     }
 
     private static void showTripWithPagination(City origin, City destination, Date date) {
-        System.out.print("enter Number of results:");
+        System.out.println("enter Number of results:");
         int maxResultInPage = scanner.nextInt();
         int startResult = 0;
         exit:
         while (true) {
-            List<Trip> trips = tripService.listTripByPaginated(origin, destination, date, startResult, maxResultInPage);
+            List<TripDto> trips = tripService.listTripByPaginated(origin, destination, date, startResult, maxResultInPage);
             System.out.println(trips);
             int result = trips.size();
             //TODO
             //result safhe baad ro begiram behtare
             showPage:
             while (true) {
-                System.out.print("1)show details 2)nextPage 3)previousPage 4)exit");
+                System.out.println("1)show details 2)nextPage 3)previousPage 4)exit");
                 int choice = scanner.nextInt();
                 switch (choice) {
                     case 1:
@@ -151,31 +152,38 @@ public class Main {
     }
 
     private static void adminActs() throws ParseException {
-        System.out.println("""
-                1)add new Admin
-                2)add new Company
-                3)add new Bus
-                4)add new Trip
-                5)show reports
-                """);
-        int choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                addAdmin();
-                break;
-            case 2:
-                addCompany();
-                break;
-            case 3:
-                addBus();
-                break;
-            case 4:
-                addTrip();
-                break;
-            case 5:
-                //TODO
-                break;
-        }
+        boolean exit = false;
+        do {
+            System.out.println("""
+                    1)add new Admin
+                    2)add new Company
+                    3)add new Bus
+                    4)add new Trip
+                    5)show reports
+                    6)exit
+                    """);
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    addAdmin();
+                    break;
+                case 2:
+                    addCompany();
+                    break;
+                case 3:
+                    addBus();
+                    break;
+                case 4:
+                    addTrip();
+                    break;
+                case 5:
+                    //TODO
+                    break;
+                case 6:
+                    exit = true;
+                    break;
+            }
+        } while (!exit);
     }
 
     private static void adminLogin() throws ParseException {
@@ -245,15 +253,15 @@ public class Main {
         trip.setOrigin(origin);
         trip.setDestination(destination);
         trip.setBus(bus);
+        trip.setPrice(price);
+        tripService.save(trip);
 
         for (int i = 1; i <= availableSeat; i++) {
             Ticket ticket = new Ticket();
-            ticket.setPrice(price);
             ticket.setSeatNumber(i);
+            ticket.setTrip(trip);
             ticketService.save(ticket);
-            trip.getTickets().add(ticket);
         }
-        tripService.save(trip);
     }
 
     private static void addAdmin() throws ParseException {

@@ -21,8 +21,23 @@ public class Trip {
     private City origin;
     @Enumerated(EnumType.STRING)
     private City destination;
-    @OneToMany
+    private Long Price;
+    @OneToMany(mappedBy = "trip")
     private List<Ticket> tickets=new ArrayList<>();
     @ManyToOne
     private Bus bus;
+
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "id=" + id +
+                ", date=" + date +
+                ", time=" + time +
+                ", origin=" + origin +
+                ", destination=" + destination +
+                ", company=" + bus.getCompany().getName() +
+                ", busType=" + bus.getType()+
+                ", AvailableSeat=" + bus.getAvailableSeat() +
+                "}\n";
+    }
 }
