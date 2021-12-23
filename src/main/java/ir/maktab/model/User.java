@@ -9,10 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@MappedSuperclass
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.TABLE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String firstname;
     private String lastname;

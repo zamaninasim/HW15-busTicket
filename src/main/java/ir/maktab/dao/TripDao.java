@@ -1,12 +1,14 @@
 package ir.maktab.dao;
 
 import ir.maktab.enums.City;
+import ir.maktab.model.Condition;
 import ir.maktab.model.Trip;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.SimpleExpression;
 
 import java.util.Date;
 import java.util.List;
@@ -20,6 +22,7 @@ public class TripDao extends BaseDao {
         transaction.commit();
         session.close();
     }
+
     public Trip get(Integer id) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -29,37 +32,37 @@ public class TripDao extends BaseDao {
         return trip;
     }
 
-    public List<Trip> listTripByPaginated(City origin, City destination, Date date, int startResult, int maxResultInPage) {
+    public List<Trip> listTripByPaginated(City origin, City destination, Condition condition, int startResult, int maxResultInPage) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         Criteria criteria = session.createCriteria(Trip.class, "t");
-        /*criteria.createAlias("t.bus","b");
-        criteria.createAlias("b.company","c");*/
-        Criterion originCond = Restrictions.eq("t.origin", origin);
-        Criterion destinationCond = Restrictions.eq("t.destination", destination);
-        Criterion dateCond = Restrictions.eq("t.date", date);
-        Criterion originAndDestinationCond = Restrictions.and(originCond, destinationCond);
-        if (date != null) {
-            criteria.add(Restrictions.and(originAndDestinationCond, dateCond));
-            /*criteria.setProjection(Projections.projectionList()
-                    .add(Projections.property("t.time").as("time"))
-                    .add(Projections.property("t.date").as("date"))
-                    .add(Projections.property("t.price").as("Price"))
-                    .add(Projections.property("c.name").as("companyName"))
-                    .add(Projections.property("b.type").as("busType"))
-                    .add(Projections.property("b.availableSeat").as("availableSeat")));
-            criteria.setResultTransformer(Transformers.aliasToBean(TripDto.class));*/
+        criteria.createAlias("t.bus","b");
+        criteria.createAlias("b.company","c");
 
-        } else {
-            criteria.add(originAndDestinationCond);
-            /*criteria.setProjection(Projections.projectionList()
-                    .add(Projections.property("t.time").as("time"))
-                    .add(Projections.property("t.date").as("date"))
-                    .add(Projections.property("t.price").as("Price"))
-                    .add(Projections.property("c.name").as("companyName"))
-                    .add(Projections.property("b.type").as("busType"))
-                    .add(Projections.property("b.availableSeat").as("availableSeat")));
-            criteria.setResultTransformer(Transformers.aliasToBean(TripDto.class));*/
+        SimpleExpression originCond = Restrictions.eq("t.origin", origin);
+        criteria.add(originCond);
+        SimpleExpression destinationCond = Restrictions.eq("t.destination", destination);
+        criteria.add(destinationCond);
+
+        if (condition.getDate() != null) {
+            SimpleExpression dateCond = Restrictions.eq("t.date", condition.getDate());
+            criteria.add(dateCond);
+        }
+        if (condition.getBusType() != null) {
+            SimpleExpression busCond = Restrictions.eq("b.type", condition.getBusType());
+            criteria.add(busCond);
+        }
+        if (condition.getCompanyName()!= null) {
+            SimpleExpression companyCond = Restrictions.eq("c.name", condition.getCompanyName());
+            criteria.add(companyCond);
+        }
+        if (condition.getMinTime() != null && condition.getMaxTime() != null) {
+            Criterion timeCond = Restrictions.between("t.time", condition.getMinTime(), condition.getMaxTime());
+            criteria.add(timeCond);
+        }
+        if (condition.getMinPrice() != null && condition.getMaxPrice() != null) {
+            Criterion priceCond = Restrictions.between("t.price", condition.getMinPrice(), condition.getMaxPrice());
+            criteria.add(priceCond);
         }
         criteria.setFirstResult(startResult);
         criteria.setMaxResults(maxResultInPage);

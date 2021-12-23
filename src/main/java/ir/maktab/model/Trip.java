@@ -21,7 +21,7 @@ public class Trip {
     private City origin;
     @Enumerated(EnumType.STRING)
     private City destination;
-    private Long Price;
+    private Long price;
     @OneToMany(mappedBy = "trip")
     private List<Ticket> tickets=new ArrayList<>();
     @ManyToOne

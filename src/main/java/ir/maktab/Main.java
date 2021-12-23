@@ -5,6 +5,7 @@ import ir.maktab.enums.*;
 import ir.maktab.model.*;
 import ir.maktab.model.builder.AdminBuilder;
 import ir.maktab.model.builder.CustomerBuilder;
+import ir.maktab.model.builder.OwnerBuilder;
 import ir.maktab.service.*;
 
 import java.text.ParseException;
@@ -23,6 +24,7 @@ public class Main {
     static final TicketService ticketService = new TicketService();
     static final CustomerService customerService = new CustomerService();
     static final ReservationService reservationService = new ReservationService();
+    static final OwnerService ownerService = new OwnerService();
 
     public static void main(String[] args) throws ParseException {
         System.out.println("1)manager\n2)customer");
@@ -61,6 +63,31 @@ public class Main {
 
         customerService.save(customer);
         return customer;
+    }
+
+    private static Owner addOwner() throws ParseException {
+        System.out.println("enter your info:(firstname,lastname,phoneNumber,nationalCode,gender)");
+        String userInfo = scanner.next();
+        String[] splitInfo = userInfo.split(",");
+        String firstname = splitInfo[0];
+        String lastname = splitInfo[1];
+        String phoneNumber = splitInfo[2];
+        String nationalCode = splitInfo[3];
+        Gender gender = Gender.getValue(splitInfo[4]);
+
+        System.out.println("enter birthdate like this:(2021-11-08)");
+        Date birthdate = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
+        Owner owner = OwnerBuilder.anOwner()
+                .withFirstname(firstname)
+                .withLastname(lastname)
+                .withPhoneNumber(phoneNumber)
+                .withNationalCode(nationalCode)
+                .withGender(gender)
+                .withBirthdate(birthdate)
+                .build();
+
+        ownerService.save(owner);
+        return owner;
     }
 
     private static void customerLogin() throws ParseException {
@@ -108,22 +135,28 @@ public class Main {
         availableSeats.stream().map(Ticket::getSeatNumber).forEach(number -> System.out.print(number + " , "));
         System.out.println();
         List<Ticket> tickets = new ArrayList<>();
+        Long tripPrice = trip.getPrice();
+        long totalPrice = 0;
         for (int i = 0; i < numberOfTickets; i++) {
             System.out.println("enter seat number");
-            System.out.println("you have to enter ticket owner info");
-            Customer owner = addCustomer();
             int seatNumber = scanner.nextInt();
-            Ticket ticket = ticketService.findTicketBySeatNumber(seatNumber, trip);
-            ticket.setTicketType(TicketType.UNAVAILABLE);
-            ticket.setOwner(owner);
-            ticketService.update(ticket);
-            tickets.add(ticket);
-            Integer availableSeat = bus.getAvailableSeat();
-            int newAvailableSeat = availableSeat - 1;
-            bus.setAvailableSeat(newAvailableSeat);
+            try {
+                Ticket ticket = ticketService.findTicketBySeatNumber(seatNumber, trip);
+                System.out.println("you have to enter ticket owner info");
+                Owner owner = addOwner();
+                ticket.setTicketType(TicketType.UNAVAILABLE);
+                ticket.setOwner(owner);
+                ticketService.update(ticket);
+                tickets.add(ticket);
+                Integer availableSeat = bus.getAvailableSeat();
+                int newAvailableSeat = availableSeat - 1;
+                bus.setAvailableSeat(newAvailableSeat);
+                busService.update(bus);
+                totalPrice = totalPrice + tripPrice;
+            } catch (RuntimeException e) {
+                e.getMessage();
+            }
         }
-        Long tripPrice = trip.getPrice();
-        long totalPrice = tripPrice * numberOfTickets;
 
         Reservation reservation = new Reservation();
         reservation.setTickets(tickets);
@@ -135,33 +168,76 @@ public class Main {
     }
 
     private static void searchForTrip() throws ParseException {
+        Date date = null;
+        String companyName = null;
+        BusType busType = null;
+        Date minTime = null;
+        Date maxTime = null;
+        Long minPrice = null;
+        Long maxPrice = null;
+
         System.out.println("origin:");
         City origin = City.getValue(scanner.next());
         System.out.println("destination:");
         City destination = City.getValue(scanner.next());
-        System.out.println("do you want to enter date:1)yes 2)no");
-        int yesOrNo = scanner.nextInt();
-        switch (yesOrNo) {
-            case 1:
-                System.out.println("enter date(yyyy-MM-dd):");
-                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
-                showTripWithPagination(origin, destination, date);
-                break;
-            case 2:
-                showTripWithPagination(origin, destination, null);
-                break;
+
+        System.out.println("do you want to enter date? 1)yes 2)no");
+        int searchDate = scanner.nextInt();
+        if (searchDate == 1) {
+            System.out.println("enter date(yyyy-MM-dd):");
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(scanner.next());
         }
+
+        System.out.println("do you want to enter busType? 1)yes 2)no");
+        int searchBusType = scanner.nextInt();
+        if (searchBusType == 1) {
+            System.out.println("enter type:(VIP or NORMAl)");
+            busType = BusType.getValue(scanner.next());
+        }
+
+        System.out.println("do you want to enter companyName? 1)yes 2)no");
+        int searchCompany = scanner.nextInt();
+        if (searchCompany == 1) {
+            System.out.println("enter companyName:");
+            companyName = scanner.next();
+        }
+
+        System.out.println("Do you want to set a limit for time? 1)yes 2)no");
+        int searchTimeLimit = scanner.nextInt();
+        if (searchTimeLimit == 1) {
+            System.out.println("enter min time:(hh:mm)");
+            minTime = new SimpleDateFormat("hh:mm").parse(scanner.next());
+            System.out.println("enter max time:(hh:mm)");
+            maxTime = new SimpleDateFormat("hh:mm").parse(scanner.next());
+        }
+        System.out.println("Do you want to set a limit for price? 1)yes 2)no");
+        int searchPriceLimit = scanner.nextInt();
+        if (searchPriceLimit == 1) {
+            System.out.println("enter min price:");
+            minPrice = Long.parseLong(scanner.next());
+            System.out.println("enter max time:");
+            maxPrice = Long.parseLong(scanner.next());
+        }
+        Condition condition = new Condition();
+        condition.setDate(date);
+        condition.setBusType(busType);
+        condition.setCompanyName(companyName);
+        condition.setMinTime(minTime);
+        condition.setMaxTime(maxTime);
+        condition.setMinPrice(minPrice);
+        condition.setMaxPrice(maxPrice);
+        showTripWithPagination(origin, destination, condition);
     }
 
-    private static void showTripWithPagination(City origin, City destination, Date date) {
+    private static void showTripWithPagination(City origin, City destination, Condition condition) {
         System.out.println("enter Number of results:");
         int maxResultInPage = scanner.nextInt();
         int startResult = 0;
         exit:
         while (true) {
-            List<TripDto> trips = tripService.listTripByPaginated(origin, destination, date, startResult, maxResultInPage);
+            List<TripDto> trips = tripService.listTripByPaginated(origin, destination, condition, startResult, maxResultInPage);
             System.out.println(trips);
-            List<TripDto> nextTrips = tripService.listTripByPaginated(origin, destination, date, startResult + maxResultInPage, maxResultInPage);
+            List<TripDto> nextTrips = tripService.listTripByPaginated(origin, destination, condition, startResult + maxResultInPage, maxResultInPage);
             int result = nextTrips.size();
             showPage:
             while (true) {

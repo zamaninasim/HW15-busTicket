@@ -3,10 +3,10 @@ package ir.maktab.service;
 import ir.maktab.dao.TripDao;
 import ir.maktab.dto.TripDto;
 import ir.maktab.enums.City;
+import ir.maktab.model.Condition;
 import ir.maktab.model.Trip;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TripService {
@@ -20,8 +20,8 @@ public class TripService {
         return tripDao.get(id);
     }
 
-    public List<TripDto> listTripByPaginated(City origin, City destination, Date date, int startResult, int maxResultInPage) {
-        List<Trip> trips = tripDao.listTripByPaginated(origin, destination, date, startResult, maxResultInPage);
+    public List<TripDto> listTripByPaginated(City origin, City destination, Condition condition, int startResult, int maxResultInPage) {
+        List<Trip> trips = tripDao.listTripByPaginated(origin, destination, condition, startResult, maxResultInPage);
         List<TripDto> tripDtos = new ArrayList<>();
         for (Trip trip : trips) {
             TripDto tripDto = new TripDto();

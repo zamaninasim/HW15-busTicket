@@ -17,7 +17,7 @@ public class Ticket {
     @ManyToOne
     private Trip trip;
     @OneToOne
-    private Customer owner;
+    private Owner owner;
 
     @Override
     public String toString() {

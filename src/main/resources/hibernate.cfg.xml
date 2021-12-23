@@ -25,6 +25,7 @@
         <mapping class="ir.maktab.model.Bus"/>
         <mapping class="ir.maktab.model.Company"/>
         <mapping class="ir.maktab.model.Trip"/>
+        <mapping class="ir.maktab.model.Owner"/>
 
 
     </session-factory>
