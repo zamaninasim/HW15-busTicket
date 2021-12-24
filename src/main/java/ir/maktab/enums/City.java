@@ -1,7 +1,7 @@
 package ir.maktab.enums;
 
 public enum City {
-    TEHRAN, SHIRAZ, MASHHAD, ESFAHAN, TABRIZ, SARI, RASHT, KASHAN,NONE;
+    TEHRAN, SHIRAZ, MASHHAD, ESFAHAN, TABRIZ, SARI, RASHT, KASHAN, NONE;
 
     public static City getValue(String city) {
         switch (city.toUpperCase()) {

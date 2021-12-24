@@ -12,6 +12,6 @@ import java.util.List;
 @Entity
 @ToString(callSuper = true)
 public class Customer extends User {
-    @OneToMany(mappedBy = "customer",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     private List<Reservation> reservations;
 }

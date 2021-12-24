@@ -28,7 +28,7 @@ public class ReservationService {
             reservationDto.setReserveDate(reservation.getReserveDate());
             reservationDto.setReservationType(reservation.getReservationType());
             reservationDto.setTotalPrice(reservation.getTotalPrice());
-            reservationDto.setSeatNumber(reservation.getTickets().stream().map(i->i.getSeatNumber()).collect(Collectors.toList()));
+            reservationDto.setSeatNumber(reservation.getTickets().stream().map(i -> i.getSeatNumber()).collect(Collectors.toList()));
             reservationDto.setTripDate(reservation.getTickets().get(0).getTrip().getDate());
             reservationDto.setTripTime(reservation.getTickets().get(0).getTrip().getTime());
             reservationDto.setOrigin(reservation.getTickets().get(0).getTrip().getOrigin());

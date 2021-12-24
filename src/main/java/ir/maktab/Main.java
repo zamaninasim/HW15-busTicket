@@ -27,16 +27,22 @@ public class Main {
     static final OwnerService ownerService = new OwnerService();
 
     public static void main(String[] args) throws ParseException {
-        System.out.println("1)manager\n2)customer");
+        System.out.println("1)manager\n2)customer\n3)exit");
         int role = scanner.nextInt();
-        switch (role) {
-            case 1:
-                adminLogin();
-                break;
-            case 2:
-                customerLogin();
-                break;
-        }
+        boolean exit = false;
+        do {
+            switch (role) {
+                case 1:
+                    adminLogin();
+                    break;
+                case 2:
+                    customerLogin();
+                    break;
+                case 3:
+                    exit = true;
+                    break;
+            }
+        } while (!exit);
     }
 
     private static Customer addCustomer() throws ParseException {
@@ -309,16 +315,20 @@ public class Main {
                     addTrip();
                     break;
                 case 5:
-                    System.out.println("enter bus type:");
-                    BusType busType = BusType.getValue(scanner.next());
-                    List<Trip> buses = tripService.findBusReservations(busType);
-                    System.out.println(buses);
+                    showStatusOfBuses();
                     break;
                 case 6:
                     exit = true;
                     break;
             }
         } while (!exit);
+    }
+
+    private static void showStatusOfBuses() {
+        System.out.println("enter bus type:");
+        BusType busType = BusType.getValue(scanner.next());
+        List<Trip> buses = tripService.findBusReservations(busType);
+        System.out.println(buses);
     }
 
     private static void adminLogin() throws ParseException {
@@ -338,7 +348,10 @@ public class Main {
                 }
             } catch (RuntimeException | ParseException e) {
                 System.out.println(e.getMessage());
-                addAdmin();
+                System.out.println("for add yourself enter administrative password:");
+                String pass = scanner.next();
+                if (pass.equals("administrative"))
+                    addAdmin();
                 repeat = false;
             }
         } while (repeat);

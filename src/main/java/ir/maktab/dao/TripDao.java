@@ -12,7 +12,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.SimpleExpression;
 
-import java.util.Date;
 import java.util.List;
 
 public class TripDao extends BaseDao {

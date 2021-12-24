@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 @Data
 @Entity
 public class Trip {
@@ -23,7 +24,7 @@ public class Trip {
     private City destination;
     private Long price;
     @OneToMany(mappedBy = "trip")
-    private List<Ticket> tickets=new ArrayList<>();
+    private List<Ticket> tickets = new ArrayList<>();
     @ManyToOne
     private Bus bus;
 
@@ -36,8 +37,8 @@ public class Trip {
                 ", origin=" + origin +
                 ", destination=" + destination +
                 ", company=" + bus.getCompany().getName() +
-                ", busType=" + bus.getType()+
-                ", busNumberOfSeats=" + bus.getNumberOfSeats()+
+                ", busType=" + bus.getType() +
+                ", busNumberOfSeats=" + bus.getNumberOfSeats() +
                 ", AvailableSeat=" + bus.getAvailableSeat() +
                 "}\n";
     }

@@ -4,6 +4,7 @@ import ir.maktab.enums.BusType;
 import lombok.Data;
 
 import java.util.Date;
+
 @Data
 public class TripDto {
     private Integer id;

@@ -1,16 +1,11 @@
 package ir.maktab.dao;
 
-import ir.maktab.enums.City;
 import ir.maktab.model.Ticket;
 import ir.maktab.model.Trip;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +25,7 @@ public class TicketDao extends BaseDao {
         transaction.commit();
         session.close();
     }
+
     public List<Ticket> findAvailableSeatByTrip(Trip trip) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -40,7 +36,8 @@ public class TicketDao extends BaseDao {
         session.close();
         return resultList;
     }
-    public Optional<Ticket> findTicketBySeatNumber(int seatNumber,Trip trip) {
+
+    public Optional<Ticket> findTicketBySeatNumber(int seatNumber, Trip trip) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         Query<Ticket> query = session.createQuery("FROM Ticket d WHERE d.seatNumber=:value AND d.trip=:tripValue and d.ticketType='AVAILABLE' ");
@@ -51,5 +48,4 @@ public class TicketDao extends BaseDao {
         session.close();
         return ticket;
     }
-
 }

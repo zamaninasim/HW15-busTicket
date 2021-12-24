@@ -3,7 +3,6 @@ package ir.maktab.dto;
 import ir.maktab.enums.BusType;
 import ir.maktab.enums.City;
 import ir.maktab.enums.ReservationType;
-import ir.maktab.model.Company;
 import lombok.Data;
 
 import java.util.Date;

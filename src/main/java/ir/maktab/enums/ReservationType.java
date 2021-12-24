@@ -5,8 +5,6 @@ public enum ReservationType {
 
     public static ReservationType getValue(String type) {
         switch (type.toUpperCase()) {
-            case "PROCESSING":
-                return PROCESSING;
             case "PAID":
                 return PAID;
             default:

@@ -38,6 +38,7 @@ public class TripService {
 
         return tripDtos;
     }
+
     public List<Trip> findBusReservations(BusType busType) {
         return tripDao.findBusReservations(busType);
     }
