@@ -1,8 +1,11 @@
 package ir.maktab.service;
 
 import ir.maktab.dao.BusDao;
+import ir.maktab.enums.BusType;
 import ir.maktab.model.Bus;
+import ir.maktab.model.Trip;
 
+import java.util.List;
 import java.util.Optional;
 
 public class BusService {
@@ -23,4 +26,6 @@ public class BusService {
         }
         throw new RuntimeException("bus not found!");
     }
+
+
 }

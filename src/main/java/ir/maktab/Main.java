@@ -309,7 +309,10 @@ public class Main {
                     addTrip();
                     break;
                 case 5:
-                    //TODO
+                    System.out.println("enter bus type:");
+                    BusType busType = BusType.getValue(scanner.next());
+                    List<Trip> buses = tripService.findBusReservations(busType);
+                    System.out.println(buses);
                     break;
                 case 6:
                     exit = true;

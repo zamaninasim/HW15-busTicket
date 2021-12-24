@@ -28,6 +28,7 @@ public class Bus {
                 ", plaque='" + plaque + '\'' +
                 ", type=" + type +
                 ", availableSeat=" + availableSeat +
+                ", numberOfSeats=" + numberOfSeats +
                 '}';
     }
 }

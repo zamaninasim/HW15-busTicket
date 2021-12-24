@@ -2,6 +2,7 @@ package ir.maktab.service;
 
 import ir.maktab.dao.TripDao;
 import ir.maktab.dto.TripDto;
+import ir.maktab.enums.BusType;
 import ir.maktab.enums.City;
 import ir.maktab.model.Condition;
 import ir.maktab.model.Trip;
@@ -36,5 +37,8 @@ public class TripService {
         }
 
         return tripDtos;
+    }
+    public List<Trip> findBusReservations(BusType busType) {
+        return tripDao.findBusReservations(busType);
     }
 }

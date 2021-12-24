@@ -37,6 +37,7 @@ public class Trip {
                 ", destination=" + destination +
                 ", company=" + bus.getCompany().getName() +
                 ", busType=" + bus.getType()+
+                ", busNumberOfSeats=" + bus.getNumberOfSeats()+
                 ", AvailableSeat=" + bus.getAvailableSeat() +
                 "}\n";
     }

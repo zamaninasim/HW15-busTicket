@@ -1,5 +1,6 @@
 package ir.maktab.dao;
 
+import ir.maktab.enums.BusType;
 import ir.maktab.enums.City;
 import ir.maktab.model.Condition;
 import ir.maktab.model.Trip;
@@ -7,6 +8,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.SimpleExpression;
 
@@ -67,6 +69,19 @@ public class TripDao extends BaseDao {
         criteria.setFirstResult(startResult);
         criteria.setMaxResults(maxResultInPage);
         List<Trip> trips = criteria.list();
+        transaction.commit();
+        session.close();
+        return trips;
+    }
+
+    public List<Trip> findBusReservations(BusType busType) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        Criteria criteria = session.createCriteria(Trip.class, "t");
+        criteria.createAlias("t.bus","b");
+        criteria.add(Restrictions.eq("b.type", busType));
+        criteria.addOrder(Order.desc("t.date"));
+        List trips = criteria.list();
         transaction.commit();
         session.close();
         return trips;
