@@ -18,12 +18,17 @@ public class Ticket {
     private Trip trip;
     @OneToOne
     private Owner owner;
+    @ManyToOne
+    private Reservation reservation;
 
     @Override
     public String toString() {
         return "Ticket{" +
                 "id=" + id +
                 ", seatNumber=" + seatNumber +
+                ", ticketType=" + ticketType +
+                ", trip=" + trip +
+                ", owner=" + owner +
                 '}';
     }
 }

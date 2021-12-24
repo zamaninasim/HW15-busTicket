@@ -66,7 +66,6 @@ public final class CustomerBuilder {
 
     public Customer build() {
         Customer customer = new Customer();
-        customer.setReservations(reservations);
         customer.setId(id);
         customer.setFirstname(firstname);
         customer.setLastname(lastname);

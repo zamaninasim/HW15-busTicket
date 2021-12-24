@@ -14,7 +14,7 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToMany
+    @OneToMany(mappedBy = "reservation",fetch = FetchType.EAGER)
     private List<Ticket> tickets;
     @ManyToOne
     private Customer customer;
@@ -23,4 +23,15 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private ReservationType reservationType;
     private long totalPrice;
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", tickets=" + tickets +
+                ", reserveDate=" + reserveDate +
+                ", reservationType=" + reservationType +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
 }

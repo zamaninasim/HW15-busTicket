@@ -107,7 +107,8 @@ public class Main {
         System.out.println("""
                 1)search for trip
                 2)buy ticket
-                3)exit
+                3)show reservations
+                4)exit
                 """);
         int choice = scanner.nextInt();
         switch (choice) {
@@ -118,6 +119,11 @@ public class Main {
                 reservation(nationalCode);
                 break;
             case 3:
+                Customer customer = customerService.findByNationalCode(nationalCode);
+                List<Reservation> reservationOfCustomer = reservationService.findReservationByCustomer(customer);
+                System.out.println(reservationOfCustomer);
+                break;
+            case 4:
                 break;
         }
 
@@ -134,9 +140,13 @@ public class Main {
         List<Ticket> availableSeats = ticketService.findAvailableSeatByTrip(trip);
         availableSeats.stream().map(Ticket::getSeatNumber).forEach(number -> System.out.print(number + " , "));
         System.out.println();
-        List<Ticket> tickets = new ArrayList<>();
         Long tripPrice = trip.getPrice();
         long totalPrice = 0;
+        Reservation reservation = new Reservation();
+        reservation.setCustomer(customer);
+        reservation.setReservationType(ReservationType.PROCESSING);
+
+        reservationService.save(reservation);
         for (int i = 0; i < numberOfTickets; i++) {
             System.out.println("enter seat number");
             int seatNumber = scanner.nextInt();
@@ -146,25 +156,20 @@ public class Main {
                 Owner owner = addOwner();
                 ticket.setTicketType(TicketType.UNAVAILABLE);
                 ticket.setOwner(owner);
+                ticket.setReservation(reservation);
                 ticketService.update(ticket);
-                tickets.add(ticket);
                 Integer availableSeat = bus.getAvailableSeat();
                 int newAvailableSeat = availableSeat - 1;
                 bus.setAvailableSeat(newAvailableSeat);
                 busService.update(bus);
                 totalPrice = totalPrice + tripPrice;
+
             } catch (RuntimeException e) {
                 e.getMessage();
             }
         }
-
-        Reservation reservation = new Reservation();
-        reservation.setTickets(tickets);
-        reservation.setCustomer(customer);
         reservation.setTotalPrice(totalPrice);
-        reservation.setReservationType(ReservationType.PROCESSING);
-
-        reservationService.save(reservation);
+        reservationService.update(reservation);
     }
 
     private static void searchForTrip() throws ParseException {
