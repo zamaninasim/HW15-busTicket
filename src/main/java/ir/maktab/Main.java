@@ -1,5 +1,6 @@
 package ir.maktab;
 
+import ir.maktab.dto.ReservationDto;
 import ir.maktab.dto.TripDto;
 import ir.maktab.enums.*;
 import ir.maktab.model.*;
@@ -10,7 +11,6 @@ import ir.maktab.service.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -119,14 +119,17 @@ public class Main {
                 reservation(nationalCode);
                 break;
             case 3:
-                Customer customer = customerService.findByNationalCode(nationalCode);
-                List<Reservation> reservationOfCustomer = reservationService.findReservationByCustomer(customer);
-                System.out.println(reservationOfCustomer);
+                showReservations(nationalCode);
                 break;
             case 4:
                 break;
         }
+    }
 
+    private static void showReservations(String nationalCode) {
+        Customer customer = customerService.findByNationalCode(nationalCode);
+        List<ReservationDto> reservationOfCustomer = reservationService.findReservationByCustomer(customer);
+        System.out.println(reservationOfCustomer);
     }
 
     private static void reservation(String nationalCode) throws ParseException {

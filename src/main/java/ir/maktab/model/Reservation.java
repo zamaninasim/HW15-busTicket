@@ -28,7 +28,6 @@ public class Reservation {
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
-                ", tickets=" + tickets +
                 ", reserveDate=" + reserveDate +
                 ", reservationType=" + reservationType +
                 ", totalPrice=" + totalPrice +
